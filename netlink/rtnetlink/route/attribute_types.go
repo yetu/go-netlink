@@ -1,6 +1,6 @@
 package route
 
-import "netlink"
+import "bitbucket.org/vase/go-netlink/netlink"
 
 /*
   Copyright (c) 2011, Abneptis LLC. All rights reserved.

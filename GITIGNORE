@@ -1,8 +1,0 @@
-_*
-*.swp
-[568].*
-*.[568]
-tools/get_routes
-tools/get_addrs
-tools/get_links
-tools/ifmanip

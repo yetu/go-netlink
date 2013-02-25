@@ -11,8 +11,8 @@ import (
 	"encoding/binary"
 	"errors"
 )
-import "bitbucket.org/vase/go-netlink/netlink/rtnetlink"
-import "bitbucket.org/vase/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink"
+import "bitbucket.org/go2clouds/go-netlink/netlink"
 
 type Header [12]byte
 

@@ -6,3 +6,6 @@ example/get_routes
 example/get_addrs
 example/get_links
 example/ifmanip
+example/addrs/addrs
+example/links/links
+example/routes/routes

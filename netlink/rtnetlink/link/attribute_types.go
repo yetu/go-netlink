@@ -6,7 +6,7 @@ package link
   See LICENSE for details
 */
 
-import "bitbucket.org/vase/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink/netlink"
 
 const (
   IFLA_UNSPEC netlink.AttributeType = iota

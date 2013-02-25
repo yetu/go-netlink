@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "bitbucket.org/vase/go-netlink/netlink/rtnetlink/addr"
-import "bitbucket.org/vase/go-netlink/netlink/rtnetlink"
+import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink/addr"
+import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink"
 import "log"
-import "bitbucket.org/vase/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink/netlink"
 
 func logec(c chan error) {
 	for i := range c {
@@ -26,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Panicf("Couldn't construct message: %v", err)
 	}
-	log.Printf("Dialing: %v", nlmsg)
+	//log.Printf("Dialing: %v", nlmsg)
 	nlsock, err := netlink.Dial(netlink.NETLINK_ROUTE)
 	if err != nil {
 		log.Panicf("Couldn't dial netlink: %v", err)
@@ -35,9 +35,9 @@ func main() {
 	ec := make(chan error)
 	go logec(ec)
 	go h.Start(ec)
-	log.Printf("Sending query: %v", nlmsg)
+	//log.Printf("Sending query: %v", nlmsg)
 	c, err := h.Query(*nlmsg, 1, 4)
-	log.Printf("Sent query: %v", nlmsg.Header)
+	//log.Printf("Sent query: %v", nlmsg.Header)
 	if err != nil {
 		log.Panicf("Couldn't write netlink: %v", err)
 	}
@@ -51,7 +51,7 @@ func main() {
 			msg := rtnetlink.NewMessage(hdr, nil)
 			err = msg.UnmarshalNetlink(i.Body, 4)
 			if err == nil {
-				log.Printf("Family: %v; Length: %d; Flags: %v; Scope: %v; IFIndex: %d",
+				log.Printf("Family: %s; Length: %d; Flags: %v; Scope: %v; IFIndex: %d",
 					hdr.AddressFamily(), hdr.PrefixLength(), hdr.Flags(), hdr.Scope(),
 					hdr.InterfaceIndex())
 

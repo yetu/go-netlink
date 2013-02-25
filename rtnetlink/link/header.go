@@ -7,8 +7,8 @@ package link
   See LICENSE for details
 */
 
-import "bitbucket.org/go2clouds/go-netlink/netlink"
-import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink"
+import "bitbucket.org/go2clouds/go-netlink"
+import "bitbucket.org/go2clouds/go-netlink/rtnetlink"
 
 import (
 	"encoding/binary"

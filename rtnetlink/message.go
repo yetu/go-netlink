@@ -11,7 +11,7 @@ import (
 	"bytes"
 	"errors"
 )
-import "bitbucket.org/go2clouds/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink"
 
 // A Message contains a Header object and a series of attributes.
 // It is extracted from the Body of a netlink.Message

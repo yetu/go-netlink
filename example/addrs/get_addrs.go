@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink/addr"
-import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink"
+import "bitbucket.org/go2clouds/go-netlink/rtnetlink/addr"
+import "bitbucket.org/go2clouds/go-netlink/rtnetlink"
 import "log"
-import "bitbucket.org/go2clouds/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink"
 
 func logec(c chan error) {
 	for i := range c {

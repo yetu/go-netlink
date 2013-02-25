@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink/link"
-import "bitbucket.org/go2clouds/go-netlink/netlink/rtnetlink"
+import "bitbucket.org/go2clouds/go-netlink/rtnetlink/link"
+import "bitbucket.org/go2clouds/go-netlink/rtnetlink"
 import "log"
-import "bitbucket.org/go2clouds/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink"
 
 func main() {
 	nlmsg, err := netlink.NewMessage(rtnetlink.RTM_GETLINK, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, &link.Header{}, 4)

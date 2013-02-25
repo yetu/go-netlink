@@ -1,6 +1,6 @@
 package route
 
-import "bitbucket.org/go2clouds/go-netlink/netlink"
+import "bitbucket.org/go2clouds/go-netlink"
 
 /*
   Copyright (c) 2011, Abneptis LLC. All rights reserved.

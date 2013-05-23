@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "bitbucket.org/go2clouds/go-netlink/rtnetlink/route"
-import "bitbucket.org/go2clouds/go-netlink/rtnetlink"
+import "bitbucket.org/vtolstov/go-netlink/rtnetlink/route"
+import "bitbucket.org/vtolstov/go-netlink/rtnetlink"
 import "log"
-import "bitbucket.org/go2clouds/go-netlink"
+import "bitbucket.org/vtolstov/go-netlink"
 
 func main() {
 	rtmsg := route.NewHeader(0, 0, 0, 0, 0, 0, 0, 0, 0)

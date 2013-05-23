@@ -11,8 +11,8 @@ import (
 	"encoding/binary"
 	"errors"
 )
-import "bitbucket.org/go2clouds/go-netlink/rtnetlink"
-import "bitbucket.org/go2clouds/go-netlink"
+import "bitbucket.org/vtolstov/go-netlink/rtnetlink"
+import "bitbucket.org/vtolstov/go-netlink"
 
 const HEADER_LENGTH = 8
 

@@ -40,7 +40,7 @@ func (self *Error) UnmarshalNetlink(in []byte, pad int) (err error) {
 	return
 }
 
-// Implements os.Error by using syscall.Errstr(-Code()) 
+// Implements os.Error by using syscall.Errstr(-Code())
 func (self Error) Error() string {
 	return self.Error()
 }

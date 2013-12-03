@@ -54,12 +54,12 @@ func (self Message) GetAttribute(t netlink.AttributeType) (attr netlink.Attribut
 }
 
 // Handles the appropriate calls to marshal the Header and Attribute values,
-// and return an appropriately padded result.
-func (self Message) MarshalNetlink(pad int) (out []byte, err error) {
-	hb, err := self.Header.MarshalNetlink(pad)
+// and return an appropriately aligned result.
+func (self Message) MarshalNetlink() (out []byte, err error) {
+	hb, err := self.Header.MarshalNetlink()
 	if err == nil {
 		var bb []byte
-		bb, err = netlink.MarshalAttributes(self.Attributes, pad)
+		bb, err = netlink.MarshalAttributes(self.Attributes)
 		if err == nil {
 			out = bytes.Join([][]byte{hb, bb}, []byte{})
 		}
@@ -70,15 +70,15 @@ func (self Message) MarshalNetlink(pad int) (out []byte, err error) {
 // Unmarshals a generic message using the header as a guide.
 // An error will be returned if the header cannot unmarshal properly,
 // or any attribute in the series failed.
-func (self *Message) UnmarshalNetlink(in []byte, pad int) (err error) {
+func (self *Message) UnmarshalNetlink(in []byte) (err error) {
 	if len(in) < self.Header.Len() {
 		return errors.New("Insufficient data for unmarshal of Header")
 	}
-	err = self.Header.UnmarshalNetlink(in[0:self.Header.Len()], pad)
+	err = self.Header.UnmarshalNetlink(in[0:self.Header.Len()])
 	if err == nil {
-		pos := netlink.Reposition(self.Header.Len(), pad)
+		pos := netlink.Align(self.Header.Len())
 		if len(in) > pos {
-			self.Attributes, err = netlink.UnmarshalAttributes(in[pos:], pad)
+			self.Attributes, err = netlink.UnmarshalAttributes(in[pos:])
 		}
 	}
 	return

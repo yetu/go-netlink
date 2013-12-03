@@ -31,7 +31,7 @@ func (self Header) Flags() Flags                    { return Flags(self[2]) }
 func (self Header) Scope() rtnetlink.Scope          { return rtnetlink.Scope(self[3]) }
 func (self Header) InterfaceIndex() uint32          { return binary.LittleEndian.Uint32(self[4:8]) }
 
-func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
+func (self *Header) UnmarshalNetlink(in []byte) (err error) {
 	if len(in) != HEADER_LENGTH {
 		err = errors.New("Wrong length for Header")
 	} else {
@@ -40,7 +40,7 @@ func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
 	return
 }
 
-func (self Header) MarshalNetlink(pad int) (out []byte, err error) {
-	out = netlink.PadBytes(self[0:HEADER_LENGTH], pad)
+func (self Header) MarshalNetlink() (out []byte, err error) {
+	out = netlink.Padded(self[0:HEADER_LENGTH])
 	return
 }

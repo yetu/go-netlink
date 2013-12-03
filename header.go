@@ -42,14 +42,14 @@ func NewHeader(t MessageType, f MessageFlags, seq uint32) (h *Header) {
 	return
 }
 
-func (self Header) MarshalNetlink(pad int) (out []byte, err error) {
+func (self Header) MarshalNetlink() (out []byte, err error) {
 	out = make([]byte, HEADER_LENGTH)
 	copy(out, self[0:HEADER_LENGTH])
-	out = PadBytes(out, pad)
+	out = Padded(out)
 	return
 }
 
-func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
+func (self *Header) UnmarshalNetlink(in []byte) (err error) {
 	if len(in) != HEADER_LENGTH {
 		err = errors.New("Incorrect NetlinkHeader length")
 	} else {

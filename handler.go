@@ -41,11 +41,11 @@ func NewHandler(sock *Socket) *Handler {
 
 // Send a message.  If SequenceNumber is unset, Seq() will be used
 // to generate one.
-func (self *Handler) Query(msg Message, l int, pad int) (ch chan Message, err error) {
+func (self *Handler) Query(msg Message, l int) (ch chan Message, err error) {
 	if msg.Header.MessageSequence() == 0 {
 		msg.Header.SetMessageSequence(self.Seq())
 	}
-	ob, err := msg.MarshalNetlink(pad)
+	ob, err := msg.MarshalNetlink()
 	if err == nil {
 		ch = make(chan Message, l)
 		self.recipients[msg.Header.MessageSequence()] = ch
@@ -61,7 +61,7 @@ func (self *Handler) Query(msg Message, l int, pad int) (ch chan Message, err er
 func (self *Handler) Start(echan chan error) {
 	r := bufio.NewReader(self.sock)
 	for {
-		msg, err := ReadMessage(r, 4)
+		msg, err := ReadMessage(r)
 		if err == nil {
 			if self.recipients[msg.Header.MessageSequence()] == nil {
 				if nil != echan {

@@ -22,7 +22,7 @@ func logec(c chan error) {
 }
 
 func main() {
-	nlmsg, err := netlink.NewMessage(rtnetlink.RTM_GETADDR, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, &addr.Header{}, 4)
+	nlmsg, err := netlink.NewMessage(rtnetlink.RTM_GETADDR, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, &addr.Header{})
 	if err != nil {
 		log.Panicf("Couldn't construct message: %v", err)
 	}
@@ -36,7 +36,7 @@ func main() {
 	go logec(ec)
 	go h.Start(ec)
 	//log.Printf("Sending query: %v", nlmsg)
-	c, err := h.Query(*nlmsg, 1, 4)
+	c, err := h.Query(*nlmsg, 1)
 	//log.Printf("Sent query: %v", nlmsg.Header)
 	if err != nil {
 		log.Panicf("Couldn't write netlink: %v", err)
@@ -49,7 +49,7 @@ func main() {
 		case rtnetlink.RTM_NEWADDR:
 			hdr := &addr.Header{}
 			msg := rtnetlink.NewMessage(hdr, nil)
-			err = msg.UnmarshalNetlink(i.Body, 4)
+			err = msg.UnmarshalNetlink(i.Body)
 			if err == nil {
 				log.Printf("Family: %s; Length: %d; Flags: %v; Scope: %v; IFIndex: %d",
 					hdr.AddressFamily(), hdr.PrefixLength(), hdr.Flags(), hdr.Scope(),

@@ -22,25 +22,25 @@ type Message struct {
 	Body   []byte
 }
 
-// NetlinkMarshaler's are used to pad and format netlink data.
+// NetlinkMarshaler's are used to format netlink data.
 type NetlinkMarshaler interface {
-	MarshalNetlink(int) ([]byte, error)
+	MarshalNetlink() ([]byte, error)
 }
 
 // Creates a new message from a marshalable object
-func NewMessage(t MessageType, f MessageFlags, u NetlinkMarshaler, pad int) (msg *Message, err error) {
+func NewMessage(t MessageType, f MessageFlags, u NetlinkMarshaler) (msg *Message, err error) {
 	msg = &Message{Header: NewHeader(t, f, 0)}
-	msg.Body, err = u.MarshalNetlink(pad)
+	msg.Body, err = u.MarshalNetlink()
 	if err == nil {
 		msg.Header.SetMessageLength(uint32(msg.Header.Len()) + uint32(len(msg.Body)))
 	}
 	return
 }
 
-// Reads a message from an io.Reader, with a specified padding.
+// Reads a message from an io.Reader, with attributes alinged to 4 bytes.
 // NB: Netlink uses a very strict protocol, and it is encouraged
 // that r be a bufio.Reader
-func ReadMessage(r io.Reader, pad int) (msg *Message, err error) {
+func ReadMessage(r io.Reader) (msg *Message, err error) {
 	var n int
 	msg = &Message{Header: &Header{}}
 	ib := make([]byte, msg.Header.Len())
@@ -49,7 +49,7 @@ func ReadMessage(r io.Reader, pad int) (msg *Message, err error) {
 		err = errors.New("Incomplete netlink header")
 	}
 	if err == nil {
-		err = msg.Header.UnmarshalNetlink(ib, pad)
+		err = msg.Header.UnmarshalNetlink(ib)
 		if err == nil {
 			msg.Body = make([]byte, msg.Header.MessageLength()-uint32(msg.Header.Len()))
 			n, err = r.Read(msg.Body)
@@ -62,9 +62,9 @@ func ReadMessage(r io.Reader, pad int) (msg *Message, err error) {
 	return
 }
 
-// Marshals a message with appropriate padding (generally none).
-func (self Message) MarshalNetlink(pad int) (out []byte, err error) {
-	hdrout, err := self.Header.MarshalNetlink(pad)
+// Marshals a message with aligned attributes..
+func (self Message) MarshalNetlink() (out []byte, err error) {
+	hdrout, err := self.Header.MarshalNetlink()
 	if err == nil {
 		out = bytes.Join([][]byte{hdrout, self.Body}, []byte{})
 	}

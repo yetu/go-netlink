@@ -11,6 +11,6 @@ package rtnetlink
 // between the netlink header and the nlattributes.
 type Header interface {
 	Len() int // The (unpadded) length of the Header.
-	UnmarshalNetlink([]byte, int) error
-	MarshalNetlink(int) ([]byte, error)
+	UnmarshalNetlink([]byte) error
+	MarshalNetlink() ([]byte, error)
 }

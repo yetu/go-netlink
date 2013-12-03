@@ -29,7 +29,7 @@ func NewHeader(fam rtnetlink.Family, itype uint16, iindex uint32, flags, changes
 }
 
 func (self Header) Len() int { return HEADER_LENGTH }
-func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
+func (self *Header) UnmarshalNetlink(in []byte) (err error) {
 	if len(in) != HEADER_LENGTH {
 		err = errors.New("Wrong length for Header")
 	} else {
@@ -38,8 +38,8 @@ func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
 	return
 }
 
-func (self Header) MarshalNetlink(pad int) (out []byte, err error) {
-	out = netlink.PadBytes(self[0:HEADER_LENGTH], pad)
+func (self Header) MarshalNetlink() (out []byte, err error) {
+	out = netlink.Padded(self[0:HEADER_LENGTH])
 	return
 }
 

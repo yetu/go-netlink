@@ -61,20 +61,20 @@ func (self *LinkHandler) SetLinkState(flag link.Flags) (err error) {
 		// specific FLAGs.
 		hdr = link.NewHeader(hdr.InterfaceFamily(), hdr.InterfaceType(), hdr.InterfaceIndex(), flag&link.IFF_UP, link.IFF_UP)
 		msg := rtnetlink.Message{Header: hdr}
-		qry, err = netlink.NewMessage(rtnetlink.RTM_SETLINK, netlink.NLM_F_ACK|netlink.NLM_F_REQUEST, msg, 4)
+		qry, err = netlink.NewMessage(rtnetlink.RTM_SETLINK, netlink.NLM_F_ACK|netlink.NLM_F_REQUEST, msg)
 	} else {
 		err = errors.New("Cant set link flags (invalid cache)")
 	}
 	if err != nil {
 		return
 	}
-	mch, err := self.h.Query(*qry, 1, 4)
+	mch, err := self.h.Query(*qry, 1)
 	if err == nil {
 		for m := range mch {
 			switch m.Header.MessageType() {
 			case netlink.NLMSG_ERROR:
 				emsg := &netlink.Error{}
-				err = emsg.UnmarshalNetlink(m.Body, 4)
+				err = emsg.UnmarshalNetlink(m.Body)
 				if err == nil && emsg.Code() != 0 {
 					err = emsg
 				}
@@ -137,10 +137,10 @@ func (self *linkFinder) GetLinkByName(s string) (lh *LinkHandler, err error) {
 
 func (self *linkFinder) GetLinkByID(i uint32) (lh *LinkHandler, err error) {
 	qry, err := netlink.NewMessage(rtnetlink.RTM_GETLINK, netlink.NLM_F_REQUEST,
-		link.NewHeader(rtnetlink.AF_UNSPEC, 0, i, 0, 0), 4)
+		link.NewHeader(rtnetlink.AF_UNSPEC, 0, i, 0, 0))
 	if err == nil {
 		var mch chan netlink.Message
-		mch, err = self.h.Query(*qry, 1, 4)
+		mch, err = self.h.Query(*qry, 1)
 		if err == nil {
 			for ii := range mch {
 				switch ii.Header.MessageType() {
@@ -148,14 +148,14 @@ func (self *linkFinder) GetLinkByID(i uint32) (lh *LinkHandler, err error) {
 					err = errors.New("Unknown message type in response to RTM_GETLINK")
 				case netlink.NLMSG_ERROR:
 					emsg := &netlink.Error{}
-					err = emsg.UnmarshalNetlink(ii.Body, 4)
+					err = emsg.UnmarshalNetlink(ii.Body)
 					if err == nil && emsg.Code() != 0 {
 						err = emsg
 					}
 				case rtnetlink.RTM_NEWLINK:
 					lhdr := &link.Header{}
 					msg := &rtnetlink.Message{Header: lhdr}
-					err = msg.UnmarshalNetlink(ii.Body, 4)
+					err = msg.UnmarshalNetlink(ii.Body)
 					if err == nil {
 						lh = &LinkHandler{h: self.h, cache: msg}
 					}
@@ -169,12 +169,12 @@ func (self *linkFinder) GetLinkByID(i uint32) (lh *LinkHandler, err error) {
 
 func (self *linkFinder) GetLinks() (lhs []*LinkHandler, err error) {
 	qry, err := netlink.NewMessage(rtnetlink.RTM_GETLINK, netlink.NLM_F_REQUEST|netlink.NLM_F_ROOT,
-		link.NewHeader(rtnetlink.AF_UNSPEC, 0, 0, 0, 0), 4)
+		link.NewHeader(rtnetlink.AF_UNSPEC, 0, 0, 0, 0))
 	if err != nil {
 		return
 	}
 	var mch chan netlink.Message
-	mch, err = self.h.Query(*qry, 1, 4)
+	mch, err = self.h.Query(*qry, 1)
 	if err == nil {
 		for ii := range mch {
 			if ii.Header.MessageType() == netlink.NLMSG_DONE {
@@ -185,14 +185,14 @@ func (self *linkFinder) GetLinks() (lhs []*LinkHandler, err error) {
 				err = errors.New("Unknown message type in response to RTM_GETLINK")
 			case netlink.NLMSG_ERROR:
 				emsg := &netlink.Error{}
-				err = emsg.UnmarshalNetlink(ii.Body, 4)
+				err = emsg.UnmarshalNetlink(ii.Body)
 				if err == nil && emsg.Code() != 0 {
 					err = emsg
 				}
 			case rtnetlink.RTM_NEWLINK:
 				lhdr := &link.Header{}
 				msg := &rtnetlink.Message{Header: lhdr}
-				err = msg.UnmarshalNetlink(ii.Body, 4)
+				err = msg.UnmarshalNetlink(ii.Body)
 				if err == nil {
 					lhs = append(lhs, &LinkHandler{h: self.h, cache: msg})
 				}

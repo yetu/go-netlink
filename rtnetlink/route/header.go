@@ -33,7 +33,7 @@ func (self Header) AddressScope() rtnetlink.Scope   { return rtnetlink.Scope(sel
 func (self Header) RouteType() Type                 { return Type(self[7]) }
 func (self Header) Flags() Flags                    { return Flags(binary.LittleEndian.Uint32(self[8:12])) }
 
-func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
+func (self *Header) UnmarshalNetlink(in []byte) (err error) {
 	if len(in) < 12 {
 		err = errors.New("Too short to be a valid Routing Message")
 	}
@@ -43,11 +43,11 @@ func (self *Header) UnmarshalNetlink(in []byte, pad int) (err error) {
 	return
 }
 
-func (self Header) MarshalNetlink(pad int) (out []byte, err error) {
+func (self Header) MarshalNetlink() (out []byte, err error) {
 	if err == nil {
 		out = make([]byte, 12)
 		copy(out, self[0:])
-		out = netlink.PadBytes(out, pad)
+		out = netlink.Padded(out)
 	}
 	return
 }

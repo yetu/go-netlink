@@ -26,13 +26,13 @@ func (self Error) Code() int32 {
 }
 
 // Marshals an error to the wire.
-func (self Error) MarshalNetlink(pad int) (out []byte, err error) {
-	out = PadBytes(self[0:ERROR_LENGTH], pad)
+func (self Error) MarshalNetlink() (out []byte, err error) {
+	out = Padded(self[0:ERROR_LENGTH])
 	return
 }
 
 // Unmarshals an error from a netlink message.
-func (self *Error) UnmarshalNetlink(in []byte, pad int) (err error) {
+func (self *Error) UnmarshalNetlink(in []byte) (err error) {
 	if len(in) < ERROR_LENGTH {
 		return errors.New(fmt.Sprintf("Invalid netlink error length: %d", len(in)))
 	}

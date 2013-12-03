@@ -16,7 +16,7 @@ import "log"
 import "bitbucket.org/vtolstov/go-netlink"
 
 func main() {
-	nlmsg, err := netlink.NewMessage(rtnetlink.RTM_GETLINK, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, &link.Header{}, 4)
+	nlmsg, err := netlink.NewMessage(rtnetlink.RTM_GETLINK, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, &link.Header{})
 	if err != nil {
 		log.Panicf("Couldn't construct message: %v", err)
 	}
@@ -27,7 +27,7 @@ func main() {
 	h := netlink.NewHandler(nlsock)
 	ec := make(chan error)
 	go h.Start(ec)
-	c, err := h.Query(*nlmsg, 1, 4)
+	c, err := h.Query(*nlmsg, 1)
 	if err != nil {
 		log.Panicf("Couldn't write netlink: %v", err)
 	}
@@ -39,7 +39,7 @@ func main() {
 		case rtnetlink.RTM_NEWLINK:
 			hdr := &link.Header{}
 			msg := rtnetlink.NewMessage(hdr, nil)
-			err = msg.UnmarshalNetlink(i.Body, 4)
+			err = msg.UnmarshalNetlink(i.Body)
 			if err == nil {
 				log.Printf("Link[%d] (Family: %v; Type: %v; Flags: %v; Changes: %v)",
 					hdr.InterfaceIndex(),

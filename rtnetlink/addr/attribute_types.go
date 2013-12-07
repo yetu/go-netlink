@@ -18,10 +18,10 @@ const (
 	IFA_ANYCAST
 	IFA_CACHEINFO
 	IFA_MULTICAST
-	IFA_MAX
+	IFA_MAX = IFA_MULTICAST
 )
 
-var AttributeStrings = map[netlink.AttributeType]string{
+var AttributeTypeStrings = map[netlink.AttributeType]string{
 	IFA_UNSPEC:    "IFA_UNSPEC",
 	IFA_ADDRESS:   "IFA_ADDRESS",
 	IFA_LOCAL:     "IFA_LOCAL",
@@ -30,5 +30,4 @@ var AttributeStrings = map[netlink.AttributeType]string{
 	IFA_ANYCAST:   "IFA_ANYCAST",
 	IFA_CACHEINFO: "IFA_CACHEINFO",
 	IFA_MULTICAST: "IFA_MULTICAST",
-	IFA_MAX:       "IFA_MAX",
 }

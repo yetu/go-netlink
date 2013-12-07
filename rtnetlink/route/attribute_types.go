@@ -26,6 +26,9 @@ const (
 	RTA_SESSION // Deprecated (?)
 	RTA_MP_ALGO // Deprecated (?)
 	RTA_TABLE
+	RTA_MARK
+	RTA_MFC_STATS
+	RTA_MAX = RTA_MFC_STATS
 )
 
 var AttributeTypeStrings = map[netlink.AttributeType]string{
@@ -45,4 +48,6 @@ var AttributeTypeStrings = map[netlink.AttributeType]string{
 	RTA_SESSION:   "RTA_SESSION",
 	RTA_MP_ALGO:   "RTA_MP_ALGO",
 	RTA_TABLE:     "RTA_TABLE",
+	RTA_MARK:      "RTA_MARK",
+	RTA_MFC_STATS: "RTA_MFC_STATS",
 }

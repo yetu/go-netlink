@@ -14,9 +14,10 @@ import "syscall"
 type Family uint8
 
 const (
-	AF_UNSPEC Family = syscall.AF_UNSPEC
-	AF_INET   Family = syscall.AF_INET
-	AF_INET6  Family = syscall.AF_INET6
+	AF_UNSPEC  Family = syscall.AF_UNSPEC
+	AF_INET    Family = syscall.AF_INET
+	AF_INET6   Family = syscall.AF_INET6
+	AF_BRIDGE  Family = syscall.AF_BRIDGE
 )
 
 // Returns the String representation of the Family,
@@ -31,6 +32,8 @@ func (self Family) String() (out string) {
 		out = "AF_INET"
 	case AF_INET6:
 		out = "AF_INET6"
+	case AF_BRIDGE:
+		out = "AF_BRIDGE"
 	}
 	return
 }

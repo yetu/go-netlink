@@ -87,6 +87,6 @@ var AttributeTypeStrings = map[netlink.AttributeType]string{
 }
 
 const (
-	RTEXT_FILTER_VF = iota
-	RTEXT_FILTER_BRVLAN
+	RTEXT_FILTER_VF     = 1 << iota
+	RTEXT_FILTER_BRVLAN = 1 << iota
 )

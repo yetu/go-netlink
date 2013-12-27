@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "bitbucket.org/vtolstov/go-netlink/rtnetlink/link"
-import "bitbucket.org/vtolstov/go-netlink/rtnetlink"
+import "github.com/vishvananda/go-netlink/rtnetlink/link"
+import "github.com/vishvananda/go-netlink/rtnetlink"
 import "log"
-import "bitbucket.org/vtolstov/go-netlink"
+import "github.com/vishvananda/go-netlink"
 import "encoding/binary"
 
 func main() {

@@ -8,11 +8,11 @@ package rtmanip
 */
 
 import (
-	"bitbucket.org/vtolstov/go-netlink/rtnetlink/link"
+	"github.com/vishvananda/go-netlink/rtnetlink/link"
 	"errors"
 )
-import "bitbucket.org/vtolstov/go-netlink/rtnetlink"
-import "bitbucket.org/vtolstov/go-netlink"
+import "github.com/vishvananda/go-netlink/rtnetlink"
+import "github.com/vishvananda/go-netlink"
 
 import "log"
 

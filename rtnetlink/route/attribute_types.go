@@ -1,6 +1,6 @@
 package route
 
-import "bitbucket.org/vtolstov/go-netlink"
+import "github.com/vishvananda/go-netlink"
 
 /*
   Copyright (c) 2011, Abneptis LLC. All rights reserved.

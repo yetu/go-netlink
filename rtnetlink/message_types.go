@@ -7,7 +7,7 @@ package rtnetlink
   See LICENSE for details
 */
 
-import "bitbucket.org/vtolstov/go-netlink"
+import "github.com/vishvananda/go-netlink"
 
 // netlink.MessageType's for RTNETLINK
 const (

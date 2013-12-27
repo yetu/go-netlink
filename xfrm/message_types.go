@@ -1,0 +1,50 @@
+package xfrm
+
+/*
+  Copyright (c) 2013, Vishvananda Ishaya. All rights reserved.
+  Original Author: Vishvananda Ishaya <vishvananda@gmail.com>
+
+  See LICENSE for details
+*/
+
+import "github.com/vishvananda/go-netlink"
+
+// netlink.MessageType's for XFRM
+const (
+	XFRM_MSG_NEWSA netlink.MessageType = iota + netlink.MIN_TYPE
+	XFRM_MSG_DELSA
+	XFRM_MSG_GETSA
+	XFRM_MSG_NEWPOLICY
+	XFRM_MSG_DELPOLICY
+	XFRM_MSG_GETPOLICY
+
+	XFRM_MSG_ALLOCSPI
+	XFRM_MSG_ACQUIRE
+	XFRM_MSG_EXPIRE
+
+	XFRM_MSG_UPDPOLICY
+	XFRM_MSG_UPDSA
+
+	XFRM_MSG_POLEXPIRE
+
+	XFRM_MSG_FLUSHSA
+	XFRM_MSG_FLUSHPOLICY
+
+	XFRM_MSG_NEWAE
+	XFRM_MSG_GETAE
+
+	XFRM_MSG_REPORT
+
+	XFRM_MSG_MIGRATE
+
+	XFRM_MSG_NEWSADINFO
+	XFRM_MSG_GETSADINFO
+
+	XFRM_MSG_NEWSPDINFO
+	XFRM_MSG_GETSPDINFO
+
+	XFRM_MSG_MAPPING
+
+	XFRM_BASE = XFRM_MSG_NEWSA
+	RTM_MAX   = XFRM_MSG_MAPPING
+)

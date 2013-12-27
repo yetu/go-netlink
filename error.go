@@ -11,6 +11,7 @@ import "fmt"
 import (
 	"encoding/binary"
 	"errors"
+	"syscall"
 )
 
 // Unlike other headers, errors MAY be longer than the minimum length.
@@ -40,7 +41,7 @@ func (self *Error) UnmarshalNetlink(in []byte) (err error) {
 	return
 }
 
-// Implements os.Error by using syscall.Errstr(-Code())
+// Implements os.Error by using the syscall Errno error
 func (self Error) Error() string {
-	return self.Error()
+	return syscall.Errno(-self.Code()).Error()
 }

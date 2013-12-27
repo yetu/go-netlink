@@ -53,7 +53,7 @@ func UnmarshalAttributes(in []byte) (out []Attribute, err error) {
 			out = append(out, Attribute{Type: AttributeType(t), Body: in[pos+4 : pos+int(l)]})
 			pos = Align(pos + int(l))
 		} else {
-			err = errors.New(fmt.Sprintf("Invalid Attributeibute (Len: %d):", l))
+			err = errors.New(fmt.Sprintf("Invalid Attribute (Len: %d):", l))
 			break
 		}
 	}

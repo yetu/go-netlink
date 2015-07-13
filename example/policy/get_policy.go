@@ -10,11 +10,11 @@ package main
   See LICENSE for details
 */
 
-import "github.com/vishvananda/go-netlink/rtnetlink/link"
-import "github.com/vishvananda/go-netlink/rtnetlink"
-import "github.com/vishvananda/go-netlink/xfrm"
+import "github.com/yetu/go-netlink/rtnetlink/link"
+import "github.com/yetu/go-netlink/rtnetlink"
+import "github.com/yetu/go-netlink/xfrm"
 import "log"
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink"
 
 func main() {
 	nlmsg, err := netlink.NewMessage(xfrm.XFRM_MSG_GETPOLICY, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, &link.Header{})

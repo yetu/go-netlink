@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "github.com/vishvananda/go-netlink/rtnetlink/addr"
-import "github.com/vishvananda/go-netlink/rtnetlink"
+import "github.com/yetu/go-netlink/rtnetlink/addr"
+import "github.com/yetu/go-netlink/rtnetlink"
 import "log"
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink"
 
 func logec(c chan error) {
 	for i := range c {

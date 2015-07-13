@@ -11,7 +11,7 @@ import (
 	"bytes"
 	"errors"
 )
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink"
 
 // A Message contains a Header object and a series of attributes.
 // It is extracted from the Body of a netlink.Message

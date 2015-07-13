@@ -7,7 +7,7 @@ package addr
   See LICENSE for details
 */
 
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink"
 
 const (
 	IFA_UNSPEC netlink.AttributeType = iota

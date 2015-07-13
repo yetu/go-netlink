@@ -8,11 +8,12 @@ package rtmanip
 */
 
 import (
-	"github.com/vishvananda/go-netlink/rtnetlink/link"
 	"errors"
+
+	"github.com/yetu/go-netlink/rtnetlink/link"
 )
-import "github.com/vishvananda/go-netlink/rtnetlink"
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink/rtnetlink"
+import "github.com/yetu/go-netlink"
 
 import "log"
 

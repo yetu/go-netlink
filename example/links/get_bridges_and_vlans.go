@@ -10,10 +10,10 @@ package main
   See LICENSE for details
 */
 
-import "github.com/vishvananda/go-netlink/rtnetlink/link"
-import "github.com/vishvananda/go-netlink/rtnetlink"
+import "github.com/yetu/go-netlink/rtnetlink/link"
+import "github.com/yetu/go-netlink/rtnetlink"
 import "log"
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink"
 import "encoding/binary"
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, link.RTEXT_FILTER_BRVLAN)
 	lnmsg := link.NewHeader(rtnetlink.AF_BRIDGE, 0, 0, 0, 0)
-	msg := rtnetlink.NewMessage(lnmsg, []netlink.Attribute{ {link.IFLA_EXT_MASK, data} })
+	msg := rtnetlink.NewMessage(lnmsg, []netlink.Attribute{{link.IFLA_EXT_MASK, data}})
 	nlmsg, err := netlink.NewMessage(rtnetlink.RTM_GETLINK, netlink.NLM_F_DUMP|netlink.NLM_F_REQUEST, msg)
 	if err != nil {
 		log.Panicf("Couldn't construct message: %v", err)

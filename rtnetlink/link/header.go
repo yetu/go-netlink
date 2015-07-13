@@ -7,8 +7,8 @@ package link
   See LICENSE for details
 */
 
-import "github.com/vishvananda/go-netlink"
-import "github.com/vishvananda/go-netlink/rtnetlink"
+import "github.com/yetu/go-netlink"
+import "github.com/yetu/go-netlink/rtnetlink"
 
 import (
 	"encoding/binary"

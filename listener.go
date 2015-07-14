@@ -25,6 +25,11 @@ func (listener *Listener) Seq() (out uint32) {
 	return
 }
 
+func (listener *Listener) Close() {
+	listener.sock.Close()
+	close(listener.Messagechan)
+}
+
 // Send a message.  If SequenceNumber is unset, Seq() will be used
 // to generate one.
 func (listener *Listener) Query(msg Message, l int) (ch chan Message, err error) {

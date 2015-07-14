@@ -1,6 +1,6 @@
 package route
 
-import "github.com/vishvananda/go-netlink"
+import "github.com/yetu/go-netlink"
 
 /*
   Copyright (c) 2011, Abneptis LLC. All rights reserved.

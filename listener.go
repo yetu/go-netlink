@@ -26,8 +26,8 @@ func (listener *Listener) Seq() (out uint32) {
 }
 
 func (listener *Listener) Close() {
+	//close(listener.Messagechan)
 	listener.sock.Close()
-	close(listener.Messagechan)
 }
 
 // Send a message.  If SequenceNumber is unset, Seq() will be used
@@ -72,15 +72,20 @@ func (listener *Listener) Start(echan chan error, listen bool) (err error) {
 		listener.Messagechan = nil
 	}
 	r := bufio.NewReader(listener.sock)
-	for {
+	for listener.sock.IsOpen() {
+		_, err = r.Peek(1)
+		if err != nil && err == bufio.ErrNegativeCount {
+			// Most probably the socket is closed
+			continue
+		}
 		msg, err := ReadMessage(r)
 		if err != nil {
 			if echan != nil {
 				echan <- err
 			} else {
-				log.Fatalf("Can't parse netlink messafe: %v", err)
+				log.Fatalf("Can't parse netlink message: %v", err)
 			}
-		} else {
+		} else if msg != nil {
 			if msg.Header.MessageType() != NLMSG_DONE {
 				if listener.recipients[msg.Header.MessageSequence()] != nil {
 					listener.recipients[msg.Header.MessageSequence()] <- *msg
@@ -93,6 +98,9 @@ func (listener *Listener) Start(echan chan error, listen bool) (err error) {
 					listener.Messagechan <- *msg
 				}
 			}
+		} else {
+			log.Fatalf("Netlink message was null")
 		}
 	}
+	return
 }

@@ -11,7 +11,12 @@ import "syscall"
 
 // A netlink.Socket implements the lowest level of netlink communications.
 type Socket struct {
-	fd int
+	fd   int
+	open bool
+}
+
+func (socket Socket) IsOpen() bool {
+	return socket.open
 }
 
 // Dials a netlink socket.  Usually you do not need permissions for this,
@@ -19,13 +24,14 @@ type Socket struct {
 func Dial(nlf NetlinkFamily) (rwc *Socket, err error) {
 	fdno, err := syscall.Socket(syscall.AF_NETLINK, syscall.SOCK_DGRAM, int(nlf))
 	if err == nil {
-		rwc = &Socket{fd: fdno}
+		rwc = &Socket{fd: fdno, open: true}
 	}
 	return
 }
 
 // Close the netlink socket
 func (self *Socket) Close() (err error) {
+	self.open = false
 	return syscall.Close(self.fd)
 }
 

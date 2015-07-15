@@ -43,6 +43,17 @@ func (self Header) MarshalNetlink() (out []byte, err error) {
 	return
 }
 
+func ParseMessage(msg netlink.Message) (ret *rtnetlink.Message, err error) {
+	hdr := &Header{}
+	ret = rtnetlink.NewMessage(hdr, nil)
+	err = ret.UnmarshalNetlink(msg.Body)
+	if err != nil {
+		ret = nil
+		return
+	}
+	return
+}
+
 func (self Header) Flags() Flags                      { return Flags(binary.LittleEndian.Uint32(self[8:12])) }
 func (self *Header) SetFlags(f Flags)                 { binary.LittleEndian.PutUint32(self[8:12], uint32(f)) }
 func (self Header) InterfaceFamily() rtnetlink.Family { return rtnetlink.Family(self[0]) }

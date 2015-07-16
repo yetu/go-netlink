@@ -86,17 +86,15 @@ func (listener *Listener) Start(echan chan error, listen bool) (err error) {
 				log.Fatalf("Can't parse netlink message: %v", err)
 			}
 		} else if msg != nil {
-			if msg.Header.MessageType() != NLMSG_DONE {
-				if listener.recipients[msg.Header.MessageSequence()] != nil {
-					listener.recipients[msg.Header.MessageSequence()] <- *msg
-					if msg.Header.MessageFlags()&NLM_F_MULTI == 0 {
-						close(listener.recipients[msg.Header.MessageSequence()])
-						delete(listener.recipients, msg.Header.MessageSequence())
-					}
+			if listener.recipients[msg.Header.MessageSequence()] != nil {
+				listener.recipients[msg.Header.MessageSequence()] <- *msg
+				if msg.Header.MessageFlags()&NLM_F_MULTI == 0 {
+					close(listener.recipients[msg.Header.MessageSequence()])
+					delete(listener.recipients, msg.Header.MessageSequence())
 				}
-				if listener.Messagechan != nil {
-					listener.Messagechan <- *msg
-				}
+			}
+			if listener.Messagechan != nil {
+				listener.Messagechan <- *msg
 			}
 		} else {
 			log.Fatalf("Netlink message was null")

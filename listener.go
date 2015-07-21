@@ -10,7 +10,6 @@ import (
 type Listener struct {
 	sock        *Socket
 	Messagechan chan Message
-	recipients  map[uint32]chan Message
 	nextSeq     uint32
 	lock        sync.Mutex
 }
@@ -38,8 +37,6 @@ func (listener *Listener) Query(msg Message, l int) (ch chan Message, err error)
 	}
 	ob, err := msg.MarshalNetlink()
 	if err == nil {
-		ch = make(chan Message, l)
-		listener.recipients[msg.Header.MessageSequence()] = ch
 		_, err = listener.sock.Write(ob)
 	}
 	return
@@ -54,22 +51,17 @@ func NewListener(nlfm NetlinkFamily) (listener *Listener, err error) {
 		return
 	}
 
-	listener = &Listener{sock: mysock, Messagechan: make(chan Message), recipients: map[uint32]chan Message{}, nextSeq: 1}
+	listener = &Listener{sock: mysock, Messagechan: make(chan Message), nextSeq: 1}
 	return
 }
 
-func (listener *Listener) Start(echan chan error, listen bool) (err error) {
+func (listener *Listener) Start(echan chan error) (err error) {
 	// ^uint32 is MAX UNIT and means that we want to listen to all multicast groups
-	if listen {
-		err = listener.sock.Bind(uint32(os.Getpid()), ^uint32(0))
-		if err != nil {
-			log.Panicf("Can't bind to netlink socket: %v", err)
-			err = err
-			return
-		}
-	} else {
-		close(listener.Messagechan)
-		listener.Messagechan = nil
+	err = listener.sock.Bind(uint32(os.Getpid()), ^uint32(0))
+	if err != nil {
+		log.Panicf("Can't bind to netlink socket: %v", err)
+		err = err
+		return
 	}
 	r := bufio.NewReader(listener.sock)
 	for listener.sock.IsOpen() {
@@ -86,16 +78,7 @@ func (listener *Listener) Start(echan chan error, listen bool) (err error) {
 				log.Fatalf("Can't parse netlink message: %v", err)
 			}
 		} else if msg != nil {
-			if listener.recipients[msg.Header.MessageSequence()] != nil {
-				listener.recipients[msg.Header.MessageSequence()] <- *msg
-				if msg.Header.MessageFlags()&NLM_F_MULTI == 0 {
-					close(listener.recipients[msg.Header.MessageSequence()])
-					delete(listener.recipients, msg.Header.MessageSequence())
-				}
-			}
-			if listener.Messagechan != nil {
-				listener.Messagechan <- *msg
-			}
+			listener.Messagechan <- *msg
 		} else {
 			log.Fatalf("Netlink message was null")
 		}

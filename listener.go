@@ -2,6 +2,8 @@ package netlink
 
 import (
 	"bufio"
+	"errors"
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -31,7 +33,7 @@ func (listener *Listener) Close() {
 
 // Send a message.  If SequenceNumber is unset, Seq() will be used
 // to generate one.
-func (listener *Listener) Query(msg Message, l int) (ch chan Message, err error) {
+func (listener *Listener) Query(msg Message) (err error) {
 	if msg.Header.MessageSequence() == 0 {
 		msg.Header.SetMessageSequence(listener.Seq())
 	}
@@ -68,6 +70,7 @@ func (listener *Listener) Start(echan chan error) (err error) {
 		_, err = r.Peek(1)
 		if err != nil && err == bufio.ErrNegativeCount {
 			// Most probably the socket is closed
+			log.Printf("Netlink socket seems to be closed, checking if socket is open")
 			continue
 		}
 		msg, err := ReadMessage(r)
@@ -78,10 +81,24 @@ func (listener *Listener) Start(echan chan error) (err error) {
 				log.Fatalf("Can't parse netlink message: %v", err)
 			}
 		} else if msg != nil {
-			listener.Messagechan <- *msg
+			if msg.Header.MessageType() == NLMSG_ERROR {
+				errmsg := &Error{}
+				ob, _ := msg.MarshalNetlink()
+				err = errmsg.UnmarshalNetlink(ob)
+				if err != nil {
+					log.Panicf("Can't unmarshall netlink error message: %v", err)
+				} else {
+					err = errors.New(fmt.Sprintf("Netlink Error (%d): %s", errmsg.Code(), errmsg.Error()))
+					echan <- err
+				}
+
+			} else {
+				listener.Messagechan <- *msg
+			}
 		} else {
 			log.Fatalf("Netlink message was null")
 		}
 	}
+	log.Printf("Stopped listening to netlink socket")
 	return
 }

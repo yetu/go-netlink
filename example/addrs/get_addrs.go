@@ -56,7 +56,8 @@ func main() {
 					hdr.InterfaceIndex())
 
 				for i := range msg.Attributes {
-					log.Printf("Attribute[%d] = %v", i, msg.Attributes[i])
+					attr := msg.Attributes[i]
+					log.Printf("Attribute[%s] = %v", addr.AttributeTypeStrings[attr.Type], attr.Body)
 				}
 			} else {
 				log.Printf("Unmarshal error: %v", err)
